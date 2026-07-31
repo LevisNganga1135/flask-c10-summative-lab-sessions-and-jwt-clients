@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import Login from "../pages/Login";
+import WorkoutList from "./WorkoutList";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("/me", {
+    fetch("/api/auth/me", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }
     }).then((r) => {
       if (r.ok) {
-        r.json().then((user) => setUser(user));
+        r.json().then((data) => setUser(data.user));
       }
     });
   }, []);
@@ -29,6 +30,7 @@ function App() {
       <NavBar setUser={setUser} />
       <main>
         <p>You are logged in!</p>
+        <WorkoutList />
       </main>
     </>
   );

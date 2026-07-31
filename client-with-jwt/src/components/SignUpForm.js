@@ -3,6 +3,7 @@ import { Button, Error, Input, FormField, Label, Textarea } from "../styles";
 
 function SignUpForm({ onLogin }) {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errors, setErrors] = useState([]);
@@ -11,23 +12,25 @@ function SignUpForm({ onLogin }) {
   function handleSubmit(e) {
     e.preventDefault();
     setErrors([]);
+
+    if (password !== passwordConfirmation) {
+      setErrors(["Passwords must match"]);
+      return;
+    }
+
     setIsLoading(true);
-    fetch("/signup", {
+    fetch("/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username,
-        password,
-        password_confirmation: passwordConfirmation
-      }),
+      body: JSON.stringify({ username, email, password }),
     }).then((r) => {
       setIsLoading(false);
       if (r.ok) {
-        r.json().then(({token, user}) => onLogin(token, user));
+        r.json().then(({access_token, user}) => onLogin(access_token, user));
       } else {
-        r.json().then((err) => setErrors(err.errors));
+        r.json().then((err) => setErrors([err.error]));
       }
     });
   }
@@ -42,6 +45,16 @@ function SignUpForm({ onLogin }) {
           autoComplete="off"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+      </FormField>
+      <FormField>
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          autoComplete="off"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </FormField>
       <FormField>

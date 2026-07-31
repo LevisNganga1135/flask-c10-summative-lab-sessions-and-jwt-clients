@@ -5,8 +5,16 @@ import { Button } from "../styles";
 
 function NavBar({ setUser }) {
   function handleLogoutClick() {
-    localStorage.removeItem("token");
-    setUser(null);
+    const token = localStorage.getItem("token");
+    fetch("/api/auth/logout", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).finally(() => {
+      localStorage.removeItem("token");
+      setUser(null);
+    });
   }
 
   return (
