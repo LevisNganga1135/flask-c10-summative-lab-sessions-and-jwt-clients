@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import Login from "../pages/Login";
 import WorkoutList from "./WorkoutList";
+import { API_URL } from "../api";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch("/api/auth/me", {
+    fetch(`${API_URL}/api/auth/me`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }

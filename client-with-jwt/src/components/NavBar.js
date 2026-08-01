@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "../styles";
+import { API_URL } from "../api";
 
 function NavBar({ setUser }) {
   function handleLogoutClick() {
     const token = localStorage.getItem("token");
-    fetch("/api/auth/logout", {
+    fetch(`${API_URL}/api/auth/logout`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

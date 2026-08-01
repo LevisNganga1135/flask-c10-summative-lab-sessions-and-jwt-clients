@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { API_URL } from "../api";
 
 function WorkoutList() {
   const [workouts, setWorkouts] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("/api/workouts", {
+    fetch(`${API_URL}/api/workouts`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
